@@ -1,0 +1,29 @@
+{
+  "name": "leveldb-sandbox",
+  "version": "0.1.0",
+  "description": "A sandbox to play with leveldb",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "createDB": "node createDB.js",
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jibsales/leveldb-sandbox"
+  },
+  "author": "Sean R. Quinn <sean@jibsales.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jibsales/leveldb-sandbox/issues"
+  },
+  "homepage": "https://github.com/jibsales/leveldb-sandbox",
+  "dependencies": {
+    "level": "^0.18.0",
+    "moment": "^2.9.0",
+    "rimraf": "^2.2.8"
+  }
+}
