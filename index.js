@@ -16,11 +16,12 @@ var db = level('./data', { valueEncoding: 'json' });
 
 function createDB (done) {
   
-  var batch = [];
+  var runsBatch = [];
+  var indexBatch = [];
 
-  // Create 1000 records of mock run data
   var days = 0;
 
+  // Create 1000 records of mock run data
   for (var i = 0; i < 1000; i++) {
     
     // Create a timestamp
@@ -50,14 +51,21 @@ function createDB (done) {
 
     // Create a key with a UID. We delimit by the null character because null is the first character in the ASCII 
     // sequence and LevelDB sorts lexicographically.
-    var key = 'runs\x00' + i;
+    var key = 'runs' + i;
     
-    // Add to the batch
-    batch.push({ type: 'put', key: key, value: obj })
+    // Add to the runs batch
+    runsBatch.push({ type: 'put', key: key, value: obj })
+
+    // Add to the index batch
+    indexBatch.push({
+      type: 'put',
+      key: [obj.method, obj.timestamp, key].join('\x00'),
+      value: null // When creating multi-dimensional keyed indices, we don't need a value
+    });
   }
 
   // Run the batch
-  db.batch(batch, done);
+  db.batch(runsBatch.concat(indexBatch), done);
 }
 
 
@@ -68,8 +76,8 @@ function find (query, done) {
 
   // Create a read stream, only looking within the prefixed range.
   db.createReadStream({
-    start: 'runs\x00',
-    end: 'runs\x00\xFF'
+    start: 'runs',
+    end: 'runs\xFF'
   })
 
   // Perform our query. See the README on ways this should be improved.
