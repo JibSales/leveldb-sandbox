@@ -22,14 +22,14 @@ utils.createData(db, function (err) {
   if (err) throw err;
   console.log('\033[32mDatabase created\033[0m');
 
-  // Create the query
+  // Create the query (uses index!)
   var query = {
     start: 'baz',
     end: 'baz\xFF',
     lte: 'baz\x00' + moment()
   }
 
-  // Execute the query (uses index!)
+  // Execute the query
   db.find(query, function (err, results, stats) {
     if (err) throw err;
     utils.printResults('All found runs:', results, stats);
