@@ -65,6 +65,7 @@ function createDB (done) {
 function find (query, done) {
   var results = [];
   var stats = { dataHits: 0, matchHits: 0 };
+  var startTime = moment().valueOf();
 
   // Create a read stream, only looking within the prefixed range.
   db.createReadStream({
@@ -94,6 +95,7 @@ function find (query, done) {
   
   // On success, return the results array and stats
   .on('close', function () {
+    stats.time = moment().valueOf() - startTime;
     done(null, results, stats);
   });
 }
@@ -115,7 +117,7 @@ createDB(function (err) {
     results.forEach(function (result) {
       console.log('Method: %s Day: %s', result.value.method, moment(result.value.timestamp).format('MM-DD-YYYY'));  
     });
-    console.log('\033[32mData hits:\033[0m %d \n\033[32mMatch hits:\033[0m %d', stats.dataHits, stats.matchHits);
+    console.log('\033[32mData hits:\033[0m %d \n\033[32mMatch hits:\033[0m %d \n\033[32mTime:\033[0m %dms', stats.dataHits, stats.matchHits, stats.time);
   });
   
 });
