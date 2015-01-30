@@ -23,7 +23,11 @@ utils.createData(db, function (err) {
   console.log('\033[32mDatabase created\033[0m');
 
   // Create the query
-  var query = { method: 'baz', day: moment() };
+  var query = {
+    start: 'baz',
+    end: 'baz\xFF',
+    lte: 'baz\x00' + moment()
+  }
 
   // Execute the query (uses index!)
   db.find(query, function (err, results, stats) {
